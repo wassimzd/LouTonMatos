@@ -1,0 +1,72 @@
+/* ===== STYLES GLOBAUX LOUTONMATOS ===== */
+
+/* Définition des variables de couleurs utilisées dans le site */
+:root {
+    --primary-color: #667eea;  /* Couleur principale bleue */
+    --secondary-color: #764ba2;  /* Couleur secondaire violette */
+    --warning-color: #F5C400;  /* Couleur d'avertissement jaune */
+    --dark-color: #1a1a1a;  /* Couleur sombre pour le texte */
+    --light-color: #f5f5f5;  /* Couleur claire pour les fonds */
+    --danger-color: #dc3545;  /* Couleur pour les erreurs */
+}
+
+/* Style de base pour tous les éléments */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Style du corps de la page */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    line-height: 1.6;
+}
+
+/* ===== STYLES DES BOUTONS ===== */
+
+/* Style de base pour tous les boutons */
+.btn {
+    border-radius: 8px;  /* Coins arrondis */
+    font-weight: 600;  /* Texte en gras */
+    transition: all 0.3s ease;  /* Animation douce pour les changements */
+    border: none;  /* Pas de bordure */
+}
+
+/* Bouton d'avertissement (jaune) */
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-color), #d4a000);  /* Dégradé jaune */
+    color: white;  /* Texte blanc */
+}
+
+/* Effet au survol du bouton jaune */
+.btn-warning:hover {
+    transform: translateY(-2px);  /* Lève le bouton de 2px */
+    box-shadow: 0 8px 15px rgba(245, 196, 0, 0.3);  /* Ombre jaune */
+    color: white;  /* Garde le texte blanc */
+}
+
+/* Bouton primaire (bleu-violet) */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));  /* Dégradé bleu-violet */
+}
+
+/* Effet au survol du bouton primaire */
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));  /* Inverse le dégradé */
+    transform: translateY(-3px);  /* Lève le bouton de 3px */
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);  /* Ombre bleue */
+}
+
+/* Bouton danger (rouge) */
+.btn-danger {
+    background: linear-gradient(135deg, #f093fb, var(--danger-color));  /* Dégradé rose-rouge */
+}
+
+/* Effet au survol du bouton danger */
+.btn-danger:hover {
+    transform: translateY(-3px);  /* Lève le bouton de 3px */
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);  /* Ombre rouge */
+}
