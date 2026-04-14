@@ -28,10 +28,15 @@ if(!empty($_POST)) {
         $user = mysqli_fetch_assoc($result);
         // Vérifier le mot de passe
         if(password_verify($mdp, $user['mdp'])) {
+            if (isset($user['actif']) && (int)$user['actif'] !== 1) {
+                $erreur = "Ce compte est desactive.";
+            } else {
             // Authentification réussie - créer la session
-            $_SESSION['user_id'] = $user['id'];
-            header("Location: accueil.php");
-            exit;
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_role'] = $user['role'] ?? 'membre';
+                header("Location: accueil.php");
+                exit;
+            }
         } else {
             // Mot de passe incorrect
             $erreur = "Mot de passe incorrect.";

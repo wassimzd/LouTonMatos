@@ -21,4 +21,8 @@ mysqli_set_charset($conn, "utf8");
 // Variable globale pour vérifier si l'utilisateur est connecté
 $is_logged_in = isset($_SESSION['user_id']) ? true : false;
 $user_id = $_SESSION['user_id'] ?? null;
+$user_role = $_SESSION['user_role'] ?? 'membre';
+$is_admin = $user_role === 'admin';
+
+define('ADMIN_SECRET_CODE', 'ADMIN2026LTM');
 ?>

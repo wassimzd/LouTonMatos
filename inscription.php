@@ -13,6 +13,7 @@ if($is_logged_in) {
 
 $erreur = "";
 $succes = "";
+$selected_role = "membre";
 
 // Traiter le formulaire d'inscription
 if(!empty($_POST)) {
@@ -21,6 +22,8 @@ if(!empty($_POST)) {
     $email = mysqli_real_escape_string($conn, $_POST['email'] ?? '');
     $mdp = $_POST['mdp'] ?? '';
     $mdp_confirm = $_POST['mdp_confirm'] ?? '';
+    $selected_role = ($_POST['role'] ?? 'membre') === 'admin' ? 'admin' : 'membre';
+    $admin_code = trim($_POST['admin_code'] ?? '');
     
     // Vérifier que les champs ne sont pas vides
     if(empty($nom) || empty($email) || empty($mdp) || empty($mdp_confirm)) {
@@ -38,6 +41,9 @@ if(!empty($_POST)) {
     else if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erreur = "Veuillez entrer une adresse email valide.";
     }
+    else if($selected_role === 'admin' && $admin_code !== ADMIN_SECRET_CODE) {
+        $erreur = "Le code admin ne correspond pas.";
+    }
     // Vérifier si l'email n'existe pas déjà
     else {
         $sql_check = "SELECT id FROM users WHERE email='$email'";
@@ -48,7 +54,7 @@ if(!empty($_POST)) {
             // Hasher le mot de passe
             $mdp_hash = password_hash($mdp, PASSWORD_DEFAULT);
             // Insérer le nouvel utilisateur dans la base de données
-            $sql = "INSERT INTO users (nom, email, mdp) VALUES ('$nom', '$email', '$mdp_hash')";
+            $sql = "INSERT INTO users (nom, email, mdp, role) VALUES ('$nom', '$email', '$mdp_hash', '$selected_role')";
             if(mysqli_query($conn, $sql)) {
                 $succes = "Inscription réussie! Vous pouvez maintenant vous connecter.";
                 // Rediriger vers la page de connexion après 2 secondes
@@ -166,6 +172,31 @@ if(isset($_SESSION['erreur'])) {
                     <input type="password" class="form-control form-input" name="mdp_confirm" 
                            placeholder="••••••••" required>
                 </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Type de compte</label>
+                <div class="d-flex gap-4 pt-1">
+                    <div class="form-check">
+                        <input class="form-check-input role-radio" type="radio" name="role" id="roleMembre" value="membre" <?= $selected_role === 'membre' ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="roleMembre">User</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input role-radio" type="radio" name="role" id="roleAdmin" value="admin" <?= $selected_role === 'admin' ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="roleAdmin">Admin</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4" id="adminCodeWrapper" style="<?= $selected_role === 'admin' ? '' : 'display: none;' ?>">
+                <label class="form-label fw-bold">Code admin</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background: white; border: 2px solid #e0e0e0;">
+                        <i class="fa-solid fa-shield-halved" style="color: #F5C400;"></i>
+                    </span>
+                    <input type="password" class="form-control form-input" name="admin_code" id="adminCodeInput" placeholder="Entrez le code admin">
+                </div>
+                <small class="text-muted">Obligatoire uniquement si vous choisissez admin.</small>
             </div>
 
             <!-- Checkbox conditions -->
@@ -298,6 +329,8 @@ if(isset($_SESSION['erreur'])) {
         const mdp = document.querySelector('input[name="mdp"]').value;
         const mdp_confirm = document.querySelector('input[name="mdp_confirm"]').value;
         const conditions = document.querySelector('#conditions').checked;
+        const roleAdmin = document.querySelector('#roleAdmin');
+        const adminCodeInput = document.querySelector('#adminCodeInput');
 
         if(mdp !== mdp_confirm) {
             e.preventDefault();
@@ -308,7 +341,37 @@ if(isset($_SESSION['erreur'])) {
             e.preventDefault();
             alert('Vous devez accepter les conditions d\'utilisation');
         }
+
+        if(roleAdmin && roleAdmin.checked && adminCodeInput && !adminCodeInput.value.trim()) {
+            e.preventDefault();
+            alert('Veuillez entrer le code admin');
+        }
     });
+
+    const roleInputs = document.querySelectorAll('.role-radio');
+    const adminCodeWrapper = document.getElementById('adminCodeWrapper');
+    const adminCodeInput = document.getElementById('adminCodeInput');
+
+    function toggleAdminCode() {
+        const isAdminSelected = document.getElementById('roleAdmin')?.checked;
+
+        if(!adminCodeWrapper || !adminCodeInput) {
+            return;
+        }
+
+        adminCodeWrapper.style.display = isAdminSelected ? 'block' : 'none';
+        adminCodeInput.required = !!isAdminSelected;
+
+        if(!isAdminSelected) {
+            adminCodeInput.value = '';
+        }
+    }
+
+    roleInputs.forEach((input) => {
+        input.addEventListener('change', toggleAdminCode);
+    });
+
+    toggleAdminCode();
 </script>
 
 </body>

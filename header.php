@@ -1,3 +1,4 @@
+
 <?php
 // Gestion de la session (déjà démarrée par session_config.php ou autre page parent)
 if(session_status() !== PHP_SESSION_ACTIVE) {
@@ -117,6 +118,11 @@ $user_id = $_SESSION['user_id'] ?? null;
       <a href="profil.php" class="btn btn-warning w-100 menu-btn-hover">
         <i class="fa-solid fa-user me-2"></i> Mon Compte
       </a>
+      <?php if($is_admin): ?>
+      <a href="admin.php" class="btn btn-warning w-100 menu-btn-hover">
+        <i class="fa-solid fa-shield-halved me-2"></i> Admin
+      </a>
+      <?php endif; ?> 
       <hr style="border-color: #F5C400;">
       <!-- Bouton déconnexion avec animation -->
       <a href="deconnexion.php" class="btn btn-danger w-100 menu-btn-hover">
@@ -282,3 +288,5 @@ function focusHeaderSearch() {
   searchInput.focus();
 }
 </script>
+header.php
+Affichage de header.php en cours...

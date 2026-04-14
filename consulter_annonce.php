@@ -8,7 +8,7 @@ if (!$is_logged_in) {
 }
 
 // 🔹 Récupérer l'id de l'annonce depuis l'URL
-$annonce_id = $_GET['id'] ?? '';
+$annonce_id = (int) ($_GET['id'] ?? 0);
 
 // 🔥 Récupérer les infos de l'annonce
 $sql = "SELECT annonces.*, users.nom, users.email 
@@ -25,16 +25,18 @@ if (!$annonce) {
     exit;
 }
 
+$is_owner = (int)$annonce['user_id'] === (int)$user_id;
+
 // 🔥 Vérifier si l'annonce est en favoris pour cet utilisateur
 $is_favoris = false;
-if ($is_logged_in) {
+if ($is_logged_in && !$is_owner) {
     $sql_fav = "SELECT id FROM favoris WHERE user_id = '$user_id' AND annonce_id = '$annonce_id'";
     $result_fav = mysqli_query($conn, $sql_fav);
     $is_favoris = mysqli_num_rows($result_fav) > 0;
 }
 
 // 🔥 TRAITER L'AJOUT/RETRAIT DE FAVORIS
-if (isset($_POST['toggle_favoris'])) {
+if (isset($_POST['toggle_favoris']) && !$is_owner) {
     if ($is_favoris) {
         // Retirer des favoris
         $sql = "DELETE FROM favoris WHERE user_id = '$user_id' AND annonce_id = '$annonce_id'";
@@ -51,7 +53,7 @@ if (isset($_POST['toggle_favoris'])) {
 }
 
 // 🔥 TRAITER L'OUVERTURE DU CHAT
-if (isset($_POST['open_chat'])) {
+if (isset($_POST['open_chat']) && !$is_owner) {
     header("Location: chat.php?annonce_id=$annonce_id");
     exit;
 }
@@ -102,12 +104,13 @@ if (isset($_POST['open_chat'])) {
                             </span>
                         </div>
                         
-                        <!-- Bouton favoris -->
-                        <form method="POST" class="d-inline">
-                            <button type="submit" name="toggle_favoris" class="btn btn-link p-0" style="font-size: 24px; color: #F5C400;">
-                                <i class="fa<?= $is_favoris ? 's' : 'r' ?> fa-heart"></i>
-                            </button>
-                        </form>
+                        <?php if(!$is_owner): ?>
+                            <form method="POST" class="d-inline">
+                                <button type="submit" name="toggle_favoris" class="btn btn-link p-0" style="font-size: 24px; color: #F5C400;">
+                                    <i class="fa<?= $is_favoris ? 's' : 'r' ?> fa-heart"></i>
+                                </button>
+                            </form>
+                        <?php endif; ?>
                     </div>
                     
                     <!-- Prix -->
@@ -139,12 +142,18 @@ if (isset($_POST['open_chat'])) {
                     </div>
                     
                     <!-- Boutons d'action -->
-                    <div class="d-flex gap-3">
-                        <form method="POST" class="flex-grow-1">
+                    <div class="d-flex gap-3 flex-column flex-sm-row">
+                        <?php if($is_owner): ?>
+                            <a href="modifier_annonce.php?id=<?= htmlspecialchars($annonce['id']) ?>" class="btn btn-warning flex-grow-1">
+                                <i class="fa-solid fa-pen-to-square me-2"></i>Modifier l'annonce
+                            </a>
+                        <?php else: ?>
+                            <form method="POST" class="flex-grow-1">
                             <button type="submit" name="open_chat" class="btn btn-warning w-100">
                                 <i class="fa-solid fa-comments me-2"></i>Contacter le propriétaire
                             </button>
-                        </form>
+                            </form>
+                        <?php endif; ?>
                     </div>
                     
                 </div>
