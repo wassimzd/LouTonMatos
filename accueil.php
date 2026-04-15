@@ -106,11 +106,7 @@ $total_membres = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
                     Dernières <span style="color: #F5C400;">annonces</span>
                 <?php endif; ?>
             </h2>
-            <?php if(empty($q)): ?>
-            <a href="accueil.php?q=" class="ltm-see-all">
-                Voir tout <i class="fa-solid fa-arrow-right ms-1"></i>
-            </a>
-            <?php endif; ?>
+           
         </div>
 
         <!-- Message aucun résultat -->
@@ -270,412 +266,409 @@ $total_membres = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
 
 <!-- ===== STYLES ===== -->
 <style>
-  /* Base */
-  .ltm-body {
-    background: #1a1a1a;
-    min-height: 100vh;
-  }
+    
+    /* Base */
+    .ltm-body {
+        background: #1a1a1a;
+        min-height: 100vh;
+    }
 
-  /* Divider */
-  .ltm-divider {
-    height: 1px;
-    background: #2a2a2a;
-    margin: 0;
-  }
+    /* Divider */
+    .ltm-divider {
+        height: 1px;
+        background: #2a2a2a;
+        margin: 0;
+    }
 
-  /* ---- HERO ---- */
-  .ltm-hero {
-    background: #111111;
-    padding: 70px 0 60px;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-  }
+    /* ---- HERO ---- */
+    .ltm-hero {
+        background: #111111;
+        padding: 70px 0 60px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
 
-  .ltm-hero-pattern {
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.015) 0px,
-      rgba(255,255,255,0.015) 1px,
-      transparent 1px,
-      transparent 20px
-    );
-    pointer-events: none;
-  }
+    .ltm-hero-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.015) 0px,
+        rgba(255,255,255,0.015) 1px,
+        transparent 1px,
+        transparent 20px
+        );
+        pointer-events: none;
+    }
 
-  .ltm-hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(245, 196, 0, 0.1);
-    border: 1px solid rgba(245, 196, 0, 0.3);
-    border-radius: 20px;
-    padding: 6px 16px;
-    font-size: 12px;
-    color: #F5C400;
-    margin-bottom: 24px;
-    position: relative;
-  }
+    .ltm-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(245, 196, 0, 0.1);
+        border: 1px solid rgba(245, 196, 0, 0.3);
+        border-radius: 20px;
+        padding: 6px 16px;
+        font-size: 12px;
+        color: #F5C400;
+        margin-bottom: 24px;
+        position: relative;
+    }
 
-  .ltm-hero-title {
-    font-size: clamp(28px, 5vw, 46px);
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1.2;
-    margin-bottom: 16px;
-    position: relative;
-  }
+    .ltm-hero-title {
+        font-size: clamp(28px, 5vw, 46px);
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+        margin-bottom: 16px;
+        position: relative;
+    }
 
-  .ltm-hero-highlight {
-    color: #F5C400;
-  }
+    .ltm-hero-highlight {
+        color: #F5C400;
+    }
 
-  .ltm-hero-subtitle {
-    font-size: 15px;
-    color: #888;
-    max-width: 520px;
-    margin: 0 auto 32px;
-    position: relative;
-  }
+    .ltm-hero-subtitle {
+        font-size: 15px;
+        color: #888;
+        max-width: 520px;
+        margin: 0 auto 32px;
+        position: relative;
+    }
 
-  /* Stats hero */
-  .ltm-hero-stats {
-    display: inline-flex;
-    align-items: center;
-    gap: 32px;
-    margin-bottom: 36px;
-    position: relative;
-  }
+    /* Stats hero */
+    .ltm-hero-stats {
+        display: inline-flex;
+        align-items: center;
+        gap: 32px;
+        margin-bottom: 36px;
+        position: relative;
+    }
 
-  .ltm-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    .ltm-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-  .ltm-stat-num {
-    font-size: 24px;
-    font-weight: 700;
-    color: #F5C400;
-    line-height: 1;
-  }
+    .ltm-stat-num {
+        font-size: 24px;
+        font-weight: 700;
+        color: #F5C400;
+        line-height: 1;
+    }
 
-  .ltm-stat-label {
-    font-size: 11px;
-    color: #666;
-    margin-top: 4px;
-  }
+    .ltm-stat-label {
+        font-size: 11px;
+        color: #666;
+        margin-top: 4px;
+    }
 
-  .ltm-stat-divider {
-    width: 1px;
-    height: 36px;
-    background: #2a2a2a;
-  }
+    .ltm-stat-divider {
+        width: 1px;
+        height: 36px;
+        background: #2a2a2a;
+    }
 
-  /* CTA Buttons hero */
-  .ltm-btn-cta-primary {
-    background: #F5C400;
-    color: #111 !important;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 28px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s ease;
-  }
-  .ltm-btn-cta-primary:hover {
-    background: #d4a800;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 196, 0, 0.25);
-    color: #111 !important;
-  }
+    /* CTA Buttons hero */
+    .ltm-btn-cta-primary {
+        background: #F5C400;
+        color: #111 !important;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 28px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    .ltm-btn-cta-primary:hover {
+        background: #d4a800;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 196, 0, 0.25);
+        color: #111 !important;
+    }
 
-  .ltm-btn-cta-outline {
-    background: transparent;
-    color: #F5C400 !important;
-    border: 1px solid rgba(245, 196, 0, 0.4);
-    border-radius: 8px;
-    padding: 12px 28px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s ease;
-  }
-  .ltm-btn-cta-outline:hover {
-    background: rgba(245, 196, 0, 0.08);
-    border-color: #F5C400;
-  }
+    .ltm-btn-cta-outline {
+        background: transparent;
+        color: #F5C400 !important;
+        border: 1px solid rgba(245, 196, 0, 0.4);
+        border-radius: 8px;
+        padding: 12px 28px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    .ltm-btn-cta-outline:hover {
+        background: rgba(245, 196, 0, 0.08);
+        border-color: #F5C400;
+    }
 
-  /* ---- SECTION ---- */
-  .ltm-section {
-    padding: 48px 0;
-  }
+    /* ---- SECTION ---- */
+    .ltm-section {
+        padding: 48px 0;
+    }
 
-  .ltm-section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 28px;
-  }
+    .ltm-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+    }
 
-  .ltm-section-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0;
-  }
+    .ltm-section-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+    }
 
-  .ltm-see-all {
-    font-size: 13px;
-    color: #F5C400;
-    text-decoration: none;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-  }
-  .ltm-see-all:hover { opacity: 1; color: #F5C400; }
+    .ltm-see-all {
+        font-size: 13px;
+        color: #F5C400;
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    .ltm-see-all:hover { opacity: 1; color: #F5C400; }
 
-  /* Empty state */
-  .ltm-empty-state {
-    text-align: center;
-    padding: 60px 20px;
-  }
+    /* Empty state */
+    .ltm-empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
 
-  /* ---- CARDS ANNONCES ---- */
-  .ltm-card {
-    background: #222222;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    height: 100%;
-  }
+    /* ---- CARDS ANNONCES ---- */
+    .ltm-card {
+        background: #222222;
+        border: 1px solid #2a2a2a;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        height: 100%;
+    }
 
-  .ltm-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(245, 196, 0, 0.3);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-  }
+    .ltm-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(245, 196, 0, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
 
-  .ltm-card-img-wrapper {
-    overflow: hidden;
-    height: 180px;
-  }
+    .ltm-card-img-wrapper {
+        overflow: hidden;
+        height: 180px;
+    }
 
-  .ltm-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
+    .ltm-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
 
-  .ltm-card:hover .ltm-card-img {
-    transform: scale(1.04);
-  }
+    .ltm-card:hover .ltm-card-img {
+        transform: scale(1.04);
+    }
 
-  .ltm-card-body {
-    padding: 14px 16px 16px;
-  }
+    .ltm-card-body {
+        padding: 14px 16px 16px;
+    }
 
-  .ltm-badge-etat {
-    display: inline-block;
-    background: #111111;
-    color: #F5C400;
-    border: 1px solid rgba(245, 196, 0, 0.3);
-    border-radius: 5px;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 9px;
-    margin-bottom: 10px;
-  }
+    .ltm-badge-etat {
+        display: inline-block;
+        background: #111111;
+        color: #F5C400;
+        border: 1px solid rgba(245, 196, 0, 0.3);
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 9px;
+        margin-bottom: 10px;
+    }
 
-  .ltm-card-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 6px;
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    .ltm-card-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 6px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-  .ltm-card-desc {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 14px;
-    line-height: 1.5;
-  }
+    .ltm-card-desc {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 14px;
+        line-height: 1.5;
+    }
 
-  .ltm-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    .ltm-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-  .ltm-card-price {
-    font-size: 17px;
-    font-weight: 700;
-    color: #F5C400;
-  }
+    .ltm-card-price {
+        font-size: 17px;
+        font-weight: 700;
+        color: #F5C400;
+    }
 
-  .ltm-card-price small {
-    font-size: 11px;
-    font-weight: 400;
-    color: #777;
-  }
+    .ltm-card-price small {
+        font-size: 11px;
+        font-weight: 400;
+        color: #777;
+    }
 
-  .ltm-btn-voir {
-    background: #F5C400;
-    color: #111 !important;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 14px;
-    font-size: 12px;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
-  }
-  .ltm-btn-voir:hover { background: #d4a800; color: #111 !important; }
+    .ltm-btn-voir {
+        background: #F5C400;
+        color: #111 !important;
+        border: none;
+        border-radius: 6px;
+        padding: 5px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+    }
+    .ltm-btn-voir:hover { background: #d4a800; color: #111 !important; }
 
-  /* ---- STEPS ---- */
-  .ltm-step-card {
-    background: #1e1e1e;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 28px 24px;
-    height: 100%;
-    transition: border-color 0.2s ease;
-  }
-  .ltm-step-card:hover {
-    border-color: rgba(245, 196, 0, 0.3);
-  }
+    /* ---- STEPS ---- */
+    .ltm-step-card {
+        background: #1e1e1e;
+        border: 1px solid #2a2a2a;
+        border-radius: 12px;
+        padding: 28px 24px;
+        height: 100%;
+        transition: border-color 0.2s ease;
+    }
+    .ltm-step-card:hover {
+        border-color: rgba(245, 196, 0, 0.3);
+    }
 
-  .ltm-step-num {
-    width: 36px;
-    height: 36px;
-    background: #F5C400;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 16px;
-  }
+    .ltm-step-num {
+        width: 36px;
+        height: 36px;
+        background: #F5C400;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 16px;
+    }
 
-  .ltm-step-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 8px;
-  }
+    .ltm-step-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+    }
 
-  .ltm-step-desc {
-    font-size: 13px;
-    color: #777;
-    line-height: 1.6;
-    margin: 0;
-  }
+    .ltm-step-desc {
+        font-size: 13px;
+        color: #777;
+        line-height: 1.6;
+        margin: 0;
+    }
 
-  /* ---- CTA BANNER ---- */
-  .ltm-cta-banner {
-    background: #F5C400;
-    border-radius: 14px;
-    padding: 32px 36px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
+    /* ---- CTA BANNER ---- */
+    .ltm-cta-banner {
+        background: #F5C400;
+        border-radius: 14px;
+        padding: 32px 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
 
-  .ltm-cta-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 6px;
-  }
+    .ltm-cta-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 6px;
+    }
 
-  .ltm-cta-sub {
-    font-size: 13px;
-    color: #5a4a00;
-    margin: 0;
-  }
+    .ltm-cta-sub {
+        font-size: 13px;
+        color: #5a4a00;
+        margin: 0;
+    }
 
-  .ltm-btn-cta-dark {
-    background: #111;
-    color: #F5C400 !important;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
-    font-size: 14px;
-    white-space: nowrap;
-    transition: background-color 0.2s ease;
-  }
-  .ltm-btn-cta-dark:hover { background: #000; color: #F5C400 !important; }
+    .ltm-btn-cta-dark {
+        background: #111;
+        color: #F5C400 !important;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        white-space: nowrap;
+        transition: background-color 0.2s ease;
+    }
+    .ltm-btn-cta-dark:hover { background: #000; color: #F5C400 !important; }
 
-  /* ---- FOOTER ---- */
-  .ltm-footer {
-    background: #111111;
-    padding: 48px 0 0;
-    border-top: 1px solid #2a2a2a;
-    margin-top: 0;
-  }
+    /* ---- FOOTER ---- */
+    .ltm-footer {
+        background: #111111;
+        padding: 48px 0 0;
+        border-top: 1px solid #2a2a2a;
+        margin-top: 0;
+    }
 
-  .ltm-footer-brand {
-    font-size: 18px;
-    font-weight: 700;
-    color: #F5C400;
-    margin-bottom: 10px;
-  }
+    .ltm-footer-brand {
+        font-size: 18px;
+        font-weight: 700;
+        color: #F5C400;
+        margin-bottom: 10px;
+    }
 
-  .ltm-footer-desc {
-    font-size: 13px;
-    color: #555;
-    line-height: 1.6;
-    max-width: 280px;
-  }
+    .ltm-footer-desc {
+        font-size: 13px;
+        color: #555;
+        line-height: 1.6;
+        max-width: 280px;
+    }
 
-  .ltm-footer-heading {
-    font-size: 11px;
-    font-weight: 700;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 14px;
-  }
+    .ltm-footer-heading {
+        font-size: 11px;
+        font-weight: 700;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 14px;
+    }
 
-  .ltm-footer-link {
-    display: block;
-    font-size: 13px;
-    color: #555;
-    text-decoration: none;
-    margin-bottom: 8px;
-    transition: color 0.2s ease;
-  }
-  .ltm-footer-link:hover { color: #F5C400; }
+    .ltm-footer-link {
+        display: block;
+        font-size: 13px;
+        color: #555;
+        text-decoration: none;
+        margin-bottom: 8px;
+        transition: color 0.2s ease;
+    }
+    .ltm-footer-link:hover { color: #F5C400; }
 
-  .ltm-footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    margin-top: 40px;
-    border-top: 1px solid #1e1e1e;
-    font-size: 12px;
-    color: #444;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+    .ltm-footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        margin-top: 40px;
+        border-top: 1px solid #1e1e1e;
+        font-size: 12px;
+        color: #444;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 
-  /* Responsive */
-  @media (max-width: 767px) {
-    .ltm-hero { padding: 48px 0 40px; }
-    .ltm-hero-stats { gap: 20px; }
-    .ltm-cta-banner { flex-direction: column; text-align: center; }
-  }
+  
+ 
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

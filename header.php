@@ -1,14 +1,13 @@
 <?php
-// Gestion de la session (déjà démarrée par session_config.php ou autre page parent)
-if(session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
+// Inclure la configuration de session et la connexion à la base de données
+require_once 'session_config.php';
+// Ce fichier doit être inclus en haut de chaque page pour gérer les sessions et la connexion à la base de données
 // Vérifier si l'utilisateur est connecté
-$is_logged = isset($_SESSION['user_id']) ? true : false;
-$user_id = $_SESSION['user_id'] ?? null;
+$is_logged = isset($_SESSION['user_id']);
 $user_role = $_SESSION['user_role'] ?? 'membre';
-$is_admin = $user_role === 'admin';
+$is_admin = $user_role === 'admin'; // Vérification de rôle pour afficher les options d'administration
+
+
 ?>
 
 <!-- ===== BARRE DE NAVIGATION ===== -->

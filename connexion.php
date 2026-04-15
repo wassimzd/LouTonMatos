@@ -222,6 +222,7 @@ if(!empty($_POST)) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    
     // Animer les champs au chargement
     document.addEventListener('DOMContentLoaded', function() {
         const formInputs = document.querySelectorAll('.form-input');

@@ -148,17 +148,7 @@ if(!$user) {
 
 <style>
     /* Animation de slide vers le haut */
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
+  
     /* Style des champs de formulaire */
     .form-input {
         border: 2px solid #e0e0e0 !important;
@@ -200,14 +190,8 @@ if(!$user) {
         animation: fadeIn 0.5s ease 0.3s both;
     }
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
+   
+    
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
