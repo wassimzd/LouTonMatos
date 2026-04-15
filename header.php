@@ -1,4 +1,3 @@
-
 <?php
 // Gestion de la session (déjà démarrée par session_config.php ou autre page parent)
 if(session_status() !== PHP_SESSION_ACTIVE) {
@@ -8,71 +7,53 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 // Vérifier si l'utilisateur est connecté
 $is_logged = isset($_SESSION['user_id']) ? true : false;
 $user_id = $_SESSION['user_id'] ?? null;
+$user_role = $_SESSION['user_role'] ?? 'membre';
+$is_admin = $user_role === 'admin';
 ?>
 
 <!-- ===== BARRE DE NAVIGATION ===== -->
-<nav class="navbar navbar-expand-lg" style="background-color: #1a1a1a; box-shadow: 0 2px 10px rgba(245, 196, 0, 0.2);">
-    <div class="container-fluid d-flex align-items-center justify-content-between">
-
-        
+<nav class="navbar navbar-expand-lg ltm-navbar">
+    <div class="container-fluid d-flex align-items-center justify-content-between px-4">
 
         <!-- Bloc logo + déposer -->
         <div class="d-flex align-items-center gap-3 flex-shrink-0">
-            <a class="navbar-brand fw-bold fs-4 logo-animate" style="color: #F5C400;" href="accueil.php">
+            <a class="navbar-brand fw-bold ltm-logo" href="accueil.php">
                 <i class="fa-solid fa-tools me-2"></i>LoueTonMatos
             </a>
-            <a href="deposer_annonce.php" class="btn btn-warning btn-lg d-none d-lg-inline-flex align-items-center gap-2 btn-deposer">
-                <i class="fa-solid fa-plus"></i>
-                Déposer une annonce
+            <a href="deposer_annonce.php" class="btn ltm-btn-primary d-none d-lg-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-plus"></i> Déposer une annonce
             </a>
 
-            <div class="d-none d-lg-flex align-items-center gap-2 header-shortcuts">
+            <div class="d-none d-lg-flex align-items-center gap-2">
                 <a href="<?= $is_logged ? 'mes_annonces.php#mes-favoris' : 'connexion.php' ?>"
-                   class="nav-btn shortcut-btn"
-                   title="Mes favoris"
-                   aria-label="Mes favoris">
+                   class="ltm-icon-btn" title="Mes favoris">
                     <i class="fa-solid fa-heart"></i>
                 </a>
 
                 <?php if($is_logged): ?>
-                    <a  href="#"
-                            class="nav-btn shortcut-btn"
-                            title="Messages"
-                            aria-label="Messages">
-                            
-                     <i class="fa-solid fa-comment" style="color: rgb(255, 212, 59);"></i>
+                    <a href="mes_messages.php" class="ltm-icon-btn" title="Messages">
+                        <i class="fa-solid fa-comment"></i>
                     </a>
                 <?php else: ?>
-                    <a href="connexion.php"
-                       class="nav-btn shortcut-btn"
-                       title="Messages"
-                       aria-label="Messages">
+                    <a href="connexion.php" class="ltm-icon-btn" title="Messages">
                         <i class="fa-solid fa-comments"></i>
                     </a>
                 <?php endif; ?>
 
-                <button type="button"
-                        class="nav-btn shortcut-btn"
-                        title="Mes recherches"
-                        aria-label="Mes recherches"
-                        onclick="focusHeaderSearch()">
+                <button type="button" class="ltm-icon-btn" title="Rechercher" onclick="focusHeaderSearch()">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                 </button>
 
                 <?php if($is_logged): ?>
                     <button type="button"
-                            class="nav-btn shortcut-btn profile-shortcut"
+                            class="ltm-icon-btn"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#profileMenu"
-                            title="Mon profil"
-                            aria-label="Mon profil">
+                            title="Mon profil">
                         <i class="fa-solid fa-circle-user"></i>
                     </button>
                 <?php else: ?>
-                    <a href="connexion.php"
-                       class="nav-btn shortcut-btn profile-shortcut"
-                       title="Mon profil"
-                       aria-label="Mon profil">
+                    <a href="connexion.php" class="ltm-icon-btn" title="Mon profil">
                         <i class="fa-solid fa-circle-user"></i>
                     </a>
                 <?php endif; ?>
@@ -80,23 +61,24 @@ $user_id = $_SESSION['user_id'] ?? null;
         </div>
 
         <!-- Barre de recherche centrale -->
-        <div class="flex-fill mx-lg-4">
-            <form class="d-flex align-items-center" action="accueil.php" method="GET">
-                <input type="search" id="headerSearchInput" name="q" class="form-control form-control-lg search-input" placeholder="Rechercher du matériel...">
-                <button class="btn btn-warning btn-lg ms-2 search-btn" type="submit">
+        <div class="flex-fill mx-4">
+            <form class="d-flex align-items-center ltm-search-form" action="accueil.php" method="GET">
+                <input type="search" id="headerSearchInput" name="q"
+                       class="form-control ltm-search-input"
+                       placeholder="Rechercher du matériel...">
+                <button class="btn ltm-search-btn" type="submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
         </div>
 
-        <!-- Boutons de navigation et profil -->
+        <!-- Boutons connexion/inscription -->
         <div class="d-flex align-items-center gap-2 flex-shrink-0">
            <?php if(!$is_logged): ?>
-               <!-- Boutons de connexion/inscription avec animations -->
-               <a href="connexion.php" class="btn btn-warning btn-sm btn-nav-hover">
+               <a href="connexion.php" class="btn ltm-btn-primary btn-sm">
                    <i class="fa-solid fa-sign-in-alt me-1"></i> Connexion
                </a>
-               <a href="inscription.php" class="btn btn-outline-warning btn-sm btn-nav-hover">
+               <a href="inscription.php" class="btn ltm-btn-outline btn-sm">
                    <i class="fa-solid fa-user-plus me-1"></i> Inscription
                </a>
            <?php endif; ?>
@@ -107,25 +89,40 @@ $user_id = $_SESSION['user_id'] ?? null;
 
 <!-- ===== MENU LATÉRAL DU PROFIL ===== -->
 <?php if($is_logged): ?>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="profileMenu" style="background-color: #1a1a1a;">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title fw-bold" style="color: #F5C400;">Mon Profil</h5>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+<div class="offcanvas offcanvas-end ltm-offcanvas" tabindex="-1" id="profileMenu">
+  <div class="offcanvas-header" style="border-bottom: 1px solid #2a2a2a;">
+    <div class="d-flex align-items-center gap-2">
+        <div class="ltm-avatar">
+            <i class="fa-solid fa-circle-user fa-lg" style="color: #F5C400;"></i>
+        </div>
+        <h5 class="offcanvas-title fw-bold mb-0" style="color: #F5C400;">Mon Profil</h5>
+    </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
   </div>
-  <div class="offcanvas-body">
+  <div class="offcanvas-body pt-4">
     <div class="d-flex flex-column gap-3">
-      <!-- Lien vers le profil -->
-      <a href="profil.php" class="btn btn-warning w-100 menu-btn-hover">
+      <a href="profil.php" class="ltm-menu-item">
         <i class="fa-solid fa-user me-2"></i> Mon Compte
       </a>
-      <?php if($is_admin): ?>
-      <a href="admin.php" class="btn btn-warning w-100 menu-btn-hover">
-        <i class="fa-solid fa-shield-halved me-2"></i> Admin
+      <a href="mes_annonces.php" class="ltm-menu-item">
+        <i class="fa-solid fa-bullhorn me-2"></i> Mes Annonces
       </a>
-      <?php endif; ?> 
-      <hr style="border-color: #F5C400;">
-      <!-- Bouton déconnexion avec animation -->
-      <a href="deconnexion.php" class="btn btn-danger w-100 menu-btn-hover">
+      <a href="mes_messages.php" class="ltm-menu-item">
+        <i class="fa-solid fa-comments me-2"></i> Mes Messages
+      </a>
+      <a href="mes_annonces.php#mes-favoris" class="ltm-menu-item">
+        <i class="fa-solid fa-heart me-2"></i> Mes Favoris
+      </a>
+      <?php if($is_admin): ?>
+      <a href="admin.php" class="ltm-menu-item ltm-menu-item--admin">
+        <i class="fa-solid fa-shield-halved me-2"></i> Administration
+      </a>
+      <?php endif; ?>
+      <hr style="border-color: #2a2a2a;">
+      <a href="deposer_annonce.php" class="btn ltm-btn-primary w-100">
+        <i class="fa-solid fa-plus me-2"></i> Déposer une annonce
+      </a>
+      <a href="deconnexion.php" class="btn ltm-btn-danger w-100">
         <i class="fa-solid fa-sign-out-alt me-2"></i> Déconnexion
       </a>
     </div>
@@ -133,160 +130,179 @@ $user_id = $_SESSION['user_id'] ?? null;
 </div>
 <?php endif; ?>
 
-<!-- ===== STYLES POUR LES ANIMATIONS ===== -->
+<!-- ===== STYLES NAVBAR ===== -->
 <style>
-  /* Animation du logo au survol */
-  .logo-animate {
-    transition: all 0.3s ease;
+  .ltm-navbar {
+    background-color: #111111;
+    border-bottom: 1px solid #2a2a2a;
+    box-shadow: 0 2px 20px rgba(245, 196, 0, 0.08);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
   }
 
-  .logo-animate:hover {
-    transform: scale(1.05);
-    text-shadow: 0 0 10px rgba(245, 196, 0, 0.5);
+  .ltm-logo {
+    color: #F5C400 !important;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    letter-spacing: -0.3px;
   }
 
-  /* Animation du champ de recherche */
-  .search-input {
-    transition: all 0.3s ease;
+  .ltm-logo:hover { opacity: 0.85; }
+
+  /* Bouton principal jaune */
+  .ltm-btn-primary {
+    background-color: #F5C400;
+    color: #111111 !important;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 16px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+  .ltm-btn-primary:hover {
+    background-color: #d4a800;
+    transform: translateY(-1px);
+    color: #111111 !important;
   }
 
-  .search-input:focus {
-    box-shadow: 0 0 12px rgba(245, 196, 0, 0.4);
-    border-color: #F5C400 !important;
+  /* Bouton outline jaune */
+  .ltm-btn-outline {
+    background: transparent;
+    color: #F5C400 !important;
+    border: 1px solid rgba(245, 196, 0, 0.5);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+  }
+  .ltm-btn-outline:hover {
+    background: rgba(245, 196, 0, 0.1);
+    border-color: #F5C400;
   }
 
-  /* Animation du bouton recherche */
-  .search-btn {
-    transition: all 0.3s ease;
+  /* Bouton danger */
+  .ltm-btn-danger {
+    background-color: #dc3545;
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 16px;
+    transition: background-color 0.2s ease;
   }
+  .ltm-btn-danger:hover { background-color: #b02a37; color: white !important; }
 
-  .search-btn:hover {
-    background-color: #d4a000;
-    transform: scale(1.05);
-  }
-
-  .nav-btn {
-    min-width: 42px;
-    min-height: 42px;
+  /* Icônes rondes */
+  .ltm-icon-btn {
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
-    border: 1px solid rgba(245, 196, 0, 0.4);
+    border: 1px solid rgba(245, 196, 0, 0.3);
     background: transparent;
     color: #F5C400;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    font-size: 14px;
   }
-
-  .nav-btn i {
-    font-size: 1rem;
-    transition: transform 0.3s ease;
-  }
-
-  .nav-btn:hover,
-  .nav-btn:focus {
-    background-color: rgba(245, 196, 0, 0.15);
-    color: white;
+  .ltm-icon-btn:hover {
+    background: rgba(245, 196, 0, 0.12);
+    border-color: #F5C400;
+    color: #fff;
     transform: translateY(-2px);
   }
 
-  .nav-btn:hover i,
-  .nav-btn:focus i {
-    transform: scale(1.1);
+  /* Barre de recherche */
+  .ltm-search-form {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
   }
-
-  .shortcut-btn {
+  .ltm-search-form:focus-within {
+    border-color: rgba(245, 196, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(245, 196, 0, 0.08);
+  }
+  .ltm-search-input {
+    background: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    padding: 10px 16px;
+    font-size: 14px;
     box-shadow: none !important;
-    outline: none;
+  }
+  .ltm-search-input::placeholder { color: #555; }
+  .ltm-search-btn {
+    background: #F5C400;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    padding: 0 16px;
+    color: #111;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+  }
+  .ltm-search-btn:hover { background-color: #d4a800; }
+
+  /* Offcanvas */
+  .ltm-offcanvas {
+    background-color: #111111;
+    width: 300px !important;
   }
 
-  .profile-shortcut i {
-    font-size: 1.15rem;
+  /* Items menu offcanvas */
+  .ltm-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+  .ltm-menu-item:hover {
+    background: rgba(245, 196, 0, 0.08);
+    border-color: rgba(245, 196, 0, 0.2);
+    color: #F5C400;
+    padding-left: 20px;
+  }
+  .ltm-menu-item--admin {
+    color: #F5C400;
+    border-color: rgba(245, 196, 0, 0.2);
+  }
+  .ltm-menu-item--admin:hover {
+    background: rgba(245, 196, 0, 0.15);
   }
 
-  .header-shortcuts {
-    margin-left: 0.25rem;
-  }
-
-  /* Animation des boutons de navigation */
-  .btn-nav-hover {
-    transition: all 0.3s ease;
-  }
-
-  .btn-nav-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(245, 196, 0, 0.3);
-  }
-
-  /* Animation des boutons du menu */
-  .menu-btn-hover {
-    transition: all 0.3s ease;
-  }
-
-  .menu-btn-hover:hover {
-    transform: translateX(5px);
-    box-shadow: 0 0 10px rgba(245, 196, 0, 0.3);
+  /* Scroll navbar shadow */
+  .ltm-navbar.scrolled {
+    box-shadow: 0 4px 20px rgba(245, 196, 0, 0.15);
   }
 </style>
 
-<!-- ===== SCRIPTS JAVASCRIPT ===== -->
 <script>
-// Animation de la navbar au scroll
 window.addEventListener('scroll', function() {
-  const navbar = document.querySelector('.navbar');
-  if (window.scrollY > 50) {
-    navbar.style.boxShadow = '0 4px 15px rgba(245, 196, 0, 0.3)';
-  } else {
-    navbar.style.boxShadow = '0 2px 10px rgba(245, 196, 0, 0.2)';
+  const navbar = document.querySelector('.ltm-navbar');
+  if (navbar) {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
   }
 });
-
-// Animation au survol des cartes (pour les pages avec des cartes)
-document.addEventListener('DOMContentLoaded', function() {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-8px)';
-      this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
-      this.style.transition = 'all 0.3s ease';
-    });
-    card.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0)';
-      this.style.boxShadow = '0 0 0 rgba(0, 0, 0, 0.1)';
-    });
-  });
-});
-
-// Fonction pour afficher une notification
-function showNotification(message, type = 'success') {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-  alertDiv.style.top = '80px';
-  alertDiv.style.right = '20px';
-  alertDiv.style.zIndex = '9999';
-  alertDiv.innerHTML = `
-    ${message}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  `;
-  document.body.appendChild(alertDiv);
-
-  setTimeout(() => {
-    alertDiv.remove();
-  }, 4000);
-}
 
 function focusHeaderSearch() {
   const searchInput = document.getElementById('headerSearchInput');
-  if (!searchInput) {
-    return;
-  }
-
-  searchInput.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+  if (!searchInput) return;
+  searchInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   searchInput.focus();
 }
 </script>
-header.php
-Affichage de header.php en cours...
